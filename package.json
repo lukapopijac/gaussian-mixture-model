@@ -1,10 +1,9 @@
 {
   "name": "gaussian-mixture-model",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Multivariate Gaussian mixture model for real-time data",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lukapopijac/gaussian-mixture-model.git"
@@ -14,7 +13,7 @@
     "gaussian mixture model",
     "machine learning",
     "unsupervised machine learning",
-	"expectation maximization"
+    "expectation maximization"
   ],
   "author": "Luka Popijac",
   "license": "MIT",
