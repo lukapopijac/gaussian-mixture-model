@@ -1,91 +1,144 @@
-module.exports = function(opts) {
+'use strict';
+
+//module.exports = class {
+class GMM {
+	constructor({dimensions, weights, means, covariances, bufferSize}) {
+		this.dimensions = dimensions;
+		this.clusters = means.length;
+		this.weights = weights ? weights : Array(this.clusters).fill(1/this.clusters);
+		this.means = means;
+		this.covariances = covariances;
+		this.bufferSize = bufferSize != null ? bufferSize : 1e6;
+		
+		this.data = Array(this.bufferSize);
+		this.idx = 0;          // index of the next data point
+		this.dataLength = 0;
+		
+		// 'tmpArr' will hold sums of cluster resp., and inverses of those sums
+		this.tmpArr = new Float32Array(this.bufferSize);
+		
+		// cluster responsibilities cResps[cluster_idx][data_idx]
+		this.cResps = Array(this.clusters);
+		for(let k=0; k<this.clusters; k++) {
+			this.cResps[k] = new Float32Array(this.bufferSize);
+		}
+	}
 	
+	addPoint(point) {		
+		this.data[this.idx] = point;
+		this.idx++;
+		if(this.idx == this.bufferSize) this.idx = 0;
+		if(this.dataLength < this.bufferSize) this.dataLength++;
+	}
 	
+	runEM(iterations = 1) {
+		if(this.dataLength==0) return;
+		for(let i=0; i<iterations; i++) {
+			runExpectation.call(this);
+			runMaximization.call(this);
+		}
+	}	
+	
+	predict(point) {
+		
+	}
 };
 
-function em({dimensions: d, weights, means, covariances, data}) {
-	let clusters = weights.length;
-	
-	let cResps = Array(clusters);
-	for(let k=0; k<clusters; k++) {
-		cResps[k] = Array(data.length);
-	}
-	let tmpArr = Array(data.length);  // will hold sums of cluster resp., and inverses of those sums
-	
-	// ****  E-step  ****
-	
-	// cResps[cluster_idx][data_idx]
-	
-	tmpArr.fill(0);
-	for(let k=0; k<clusters; k++) {
-		let resps = cResps[k];
-		let weight = weights[k];
-		let mean = means[k];
-		let cov = covariances[k];
 
-		for(let i=0; i<data.length; i++) {
-			tmpArr[i] += resps[i] = weight * pdf(data[i], mean, cov);
+var gmm = new GMM({
+	dimensions: 2,
+	bufferSize: 1000,
+	weights: [1/3, 1/3, 1/3],
+	means: [[3,4],[6,3],[4,6]],
+	covariances: [
+		[[3,0],[0,3]],
+		[[3,0],[0,3]],
+		[[3,0],[0,3]]
+	]	
+});
+
+gmm.addPoint([2,1]);
+gmm.addPoint([10,5]);
+gmm.addPoint([3,7]);
+
+gmm.runEM(1);
+
+console.log(gmm.weights);
+console.log(gmm.means);
+console.log(gmm.covariances);
+
+function runExpectation() {
+	this.tmpArr.fill(0, 0, this.dataLength);
+	for(let k=0; k<this.clusters; k++) {
+		let resps = this.cResps[k];
+		let weight = this.weights[k];
+		let mean = this.means[k];
+		let cov = this.covariances[k];
+
+		for(let i=0; i<this.dataLength; i++) {
+			this.tmpArr[i] += resps[i] = weight * pdf(this.data[i], mean, cov);
 		}
 	}
 	
-	for(let i=0; i<data.length; i++) tmpArr[i] = 1/tmpArr[i];
+	for(let i=0; i<this.dataLength; i++) this.tmpArr[i] = 1/this.tmpArr[i];
 	
-	for(let k=0; k<clusters; k++) {
-		let resps = cResps[k];
-		for(let i=0; i<data.length; i++) {
-			resps[i] *= tmpArr[i];
+	for(let k=0; k<this.clusters; k++) {
+		let resps = this.cResps[k];
+		for(let i=0; i<this.dataLength; i++) {
+			resps[i] *= this.tmpArr[i];
 		}
-		//console.log(k, resps.map(x=>x.toFixed(9)));
 	}
-	
-	// ****  M-step  ****
-	
-	for(let k=0; k<clusters; k++) {
-		let resps = cResps[k];
+}
+
+
+function runMaximization() {
+	for(let k=0; k<this.clusters; k++) {
+		let resps = this.cResps[k];
 		
-		// weights
+		// soft count of data points in this cluster
 		let softCount = 0;
-		for(let i=0; i<data.length; i++) {
+		for(let i=0; i<this.dataLength; i++) {
 			softCount += resps[i];
 		}
-		weights[k] = softCount / data.length;
 		let scInv = 1/softCount;
 		
+		// weights
+		this.weights[k] = softCount / this.dataLength;
+		
 		// means
-		let mean = means[k].fill(0);
-		for(let i=0; i<data.length; i++) {
-			for(let t=0; t<d; t++) {
-				mean[t] += resps[i]*data[i][t];
+		let mean = this.means[k].fill(0);
+		for(let i=0; i<this.dataLength; i++) {
+			for(let t=0; t<this.dimensions; t++) {
+				mean[t] += resps[i]*this.data[i][t];
 			}
 		}
-		for(let t=0; t<d; t++) mean[t] *= scInv;
+		for(let t=0; t<this.dimensions; t++) mean[t] *= scInv;
 		
 		// covariances
-		let cov = covariances[k];
-		for(let t=0; t<d; t++) cov[t].fill(0);		
+		let cov = this.covariances[k];
+		for(let t=0; t<this.dimensions; t++) cov[t].fill(0);		
 		
-		let diff = Array(d);
-		for(let i=0; i<data.length; i++) {
-			let datum = data[i];
+		let diff = Array(this.dimensions);
+		for(let i=0; i<this.dataLength; i++) {
+			let datum = this.data[i];
 			
-			for(let t=0; t<d; t++) {
+			for(let t=0; t<this.dimensions; t++) {
 				diff[t] = datum[t] - mean[t];
 			}
 			
-			for(let t1=0; t1<d; t1++) {
-				for(let t2=0; t2<d; t2++) {
+			for(let t1=0; t1<this.dimensions; t1++) {
+				for(let t2=0; t2<this.dimensions; t2++) {
 					cov[t1][t2] += resps[i]*diff[t1]*diff[t2];
 				}
 			}
 		}
-		for(let t1=0; t1<d; t1++) {
-			for(let t2=0; t2<d; t2++) {
+		for(let t1=0; t1<this.dimensions; t1++) {
+			for(let t2=0; t2<this.dimensions; t2++) {
 				cov[t1][t2] *= scInv;
 			}
 		}
 	}
 }
-
 
 // probability density function
 function pdf(x, mean, cov) {
@@ -113,25 +166,4 @@ function pdf(x, mean, cov) {
 		}
 	}
 }
-
-
-
-
-//var gmm = require('gaussian-mixture-model');
-//gmm.init({...});
-//gmm.push([4,3]);
-//gmm.expectationMaximization(10);
-
-em({
-	dimensions: 2,
-	bufferSize: 1000,
-	weights: [1/3, 1/3, 1/3],
-	means: [[3,4],[6,3],[4,6]],
-	covariances: [
-		[[3,0],[0,3]],
-		[[3,0],[0,3]],
-		[[3,0],[0,3]]
-	],
-	data: [[10,5], [2,1], [3,7]]
-});
 
