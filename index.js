@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+important:
+This algorithm doesn't handle possible singularity issues. In case of singularities,
+result will contain bunch of NaN values.
+example: if one of the gaussians is stuck at only one data point, it will shrink
+to it and variance will converge to zero.
+*/
+
 //module.exports = class {
 class GMM {
 	constructor({dimensions, weights, means, covariances, bufferSize}) {
