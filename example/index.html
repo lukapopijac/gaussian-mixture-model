@@ -3,10 +3,54 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Gaussian Mixture Model Demo</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="style.css" />
 		<script src="gmm.js"></script>
 		<script src="main.js"></script>
 	</head>
 	<body>
+		<div class="main-container">
+			<div class="controls1">
+				<button>Clear All</button>
+				<br>
+				Click on the graph to add 
+				<select>
+					<option>1</option>
+					<option>5</option>
+					<option>20</option>
+				</select>
+				point(s),
+				<br>
+				or type them:
+				<input placeholder="e.g. [50,-20], [75,8], [-9,30]"/>
+				<button>Add</button>
+			</div>
+			
+			<div class="graph">
+			</div>
+			
+			<div class="controls2">
+				Clusters:
+				<select>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+					<option>7</option>
+				</select>
+				<button>Initialize Clusters</button>
+				<br>
+				<button>Run</button> next
+				<select>
+					<option>1</option>
+					<option>10</option>
+					<option>100</option>
+				</select>
+				iteration(s).
+			</div>
+		</div>
 	</body>
 </html>

@@ -1,0 +1,35 @@
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+body {
+	margin: 0;
+	background-color: #e9ddaf;
+	text-align: center;
+}
+
+.main-container {
+	display: flex;
+}
+
+.controls1 {
+	max-width: 700px;
+	width: 400px;
+	background: lightblue;
+}
+
+.controls2 {
+	max-width: 700px;
+	width: 400px;
+	background: lightgreen;
+}
+
+.graph {
+	max-width: 700px;
+	width: 300px;
+	height: 100px;
+	background: yellow;
+}
