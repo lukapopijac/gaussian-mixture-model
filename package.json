@@ -9,7 +9,7 @@
     "url": "git+https://github.com/lukapopijac/gaussian-mixture-model.git"
   },
   "files": [
-    "package"
+    "package/"
   ],
   "keywords": [
     "mixture model",
