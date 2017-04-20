@@ -12,7 +12,7 @@ function wrapForBrowser(code) {
 
 let source = fs.readFileSync('index.js');
 
-fs.writeFileSync(path.join('package', 'index.js'), source);
+//fs.writeFileSync(path.join('package', 'index.js'), source);
 fs.writeFileSync(path.join('dist', 'gmm.js'), wrapForBrowser(source));
 fs.writeFileSync(path.join('example', 'gmm.js'), wrapForBrowser(source));
 

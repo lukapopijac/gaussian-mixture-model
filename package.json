@@ -8,6 +8,11 @@
     "type": "git",
     "url": "git+https://github.com/lukapopijac/gaussian-mixture-model.git"
   },
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
   "keywords": [
     "mixture model",
     "gaussian mixture model",
