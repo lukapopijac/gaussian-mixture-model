@@ -17,4 +17,4 @@ fs.writeFileSync(path.join('dist', 'gmm.js'), wrapForBrowser(source));
 fs.writeFileSync(path.join('example', 'gmm.js'), wrapForBrowser(source));
 
 // copy package.json
-fs.writeFileSync(path.join('package', 'package.json'), fs.readFileSync('package.json'));
+//fs.writeFileSync(path.join('package', 'package.json'), fs.readFileSync('package.json'));
