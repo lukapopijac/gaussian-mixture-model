@@ -1,1 +1,24 @@
-package.json
+{
+  "name": "gaussian-mixture-model",
+  "version": "0.0.2",
+  "description": "Multivariate Gaussian mixture model for real-time data",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukapopijac/gaussian-mixture-model.git"
+  },
+  "keywords": [
+    "mixture model",
+    "gaussian mixture model",
+    "machine learning",
+    "unsupervised machine learning",
+    "expectation maximization"
+  ],
+  "author": "Luka Popijac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukapopijac/gaussian-mixture-model/issues"
+  },
+  "homepage": "https://github.com/lukapopijac/gaussian-mixture-model#readme"
+}
