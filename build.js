@@ -6,7 +6,12 @@ const path = require('path');
 // create destination folder if it doesn't exist
 if(!fs.existsSync('dist')) fs.mkdirSync('dist');
 
-let source = fs.createReadStream('index.js');
-source.pipe(fs.createWriteStream(path.join('package', 'index.js')));
-source.pipe(fs.createWriteStream(path.join('dist', 'gmm.js')));
-source.pipe(fs.createWriteStream(path.join('example', 'gmm.js')));
+function wrapForBrowser(code) {
+	return 'var GMM = function(module){\n' + code + 'return module.exports}({});';
+}
+
+let source = fs.readFileSync('index.js');
+
+fs.writeFileSync(path.join('package', 'index.js'), source);
+fs.writeFileSync(path.join('dist', 'gmm.js'), wrapForBrowser(source));
+fs.writeFileSync(path.join('example', 'gmm.js'), wrapForBrowser(source));
