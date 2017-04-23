@@ -7,15 +7,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="style.css" />
 		<script src="gmm.js"></script>
-		<script src="main.js"></script>
+		<script src="main.js" defer></script>
 	</head>
 	<body>
 		<h1>Gaussian Mixture Model Demo</h1>
 		<div class="container">
-			<div class="graph">
-				<canvas></canvas>
-			</div>
-
 			<div class="controls-top">
 				<button>Clear All</button>
 				<br>
@@ -30,6 +26,47 @@
 				or type them:
 				<input placeholder="e.g. [50,-20], [75,8], [-9,30]"/>
 				<button>Add</button>
+			</div>
+
+			<div class="graph">
+				<div class="y-axis">
+					<div>100</div>
+					<div>75</div>
+					<div>50</div>
+					<div>25</div>
+					<div>0</div>
+					<div>-25</div>
+					<div>-50</div>
+					<div>-75</div>
+					<div>-100</div>
+				</div>
+				<div class="canvas-wrapper">
+					<canvas></canvas>
+				</div>
+				<div class="x-axis">
+					<!--
+					<div>-100</div>
+					<div>-75</div>
+					<div>-50</div>
+					<div>-25</div>
+					<div>0</div>
+					<div>25</div>
+					<div>50</div>
+					<div>75</div>
+					<div>100</div>
+					-->
+					<div>-100</div>
+					<div>-80</div>
+					<div>-60</div>
+					<div>-40</div>
+					<div>-20</div>
+					<div>0</div>
+					<div>20</div>
+					<div>40</div>
+					<div>60</div>
+					<div>80</div>
+					<div>100</div>
+				</div>
 			</div>
 			
 			<div class="controls-bottom">
@@ -54,5 +91,6 @@
 				iteration(s).
 			</div>
 		</div>
+		<div>nest dsahf kdsjgh dkjfg sdkfjh skdfgsdfg</div>
 	</body>
 </html>
