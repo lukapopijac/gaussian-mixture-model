@@ -1,41 +1,53 @@
 'use strict';
 
-let canvas = document.querySelector('.graph canvas');
-/*
+const canvas = document.querySelector('.graph canvas');
+const xMin = -0, xMax = 12;
+const yMin = -0, yMax = 12;
 
+const points = [];
 
 canvas.addEventListener('click', function(e) {
-	console.log(e.offsetX, e.offsetY);
-	console.log(canvas.width, canvas.height);
-	
-	var wpx = canvas.scrollWidth;
-	var hpx = canvas.scrollHeight;
-	
-	console.log(wpx, hpx, wpx/hpx);
-	
-	var xMin = -100;
-	var xMax = 100;
-});
-*/
+	let w = canvas.width;
+	let h = canvas.height;
+	let p = [e.offsetX/w*(xMax-xMin) + xMin, e.offsetY/h*(yMax-yMin) + yMin];
 
-
-let container = document.querySelector('.container');
-let canvasWrap = document.querySelector('.graph .canvas-wrapper');
-let yAxis = document.querySelector('.graph .y-axis');
-let axisThick = yAxis.getBoundingClientRect().width;
-let graph = document.querySelector('.graph');
-
-window.addEventListener('resize', function() {
-	var w = canvasWrap.getBoundingClientRect().width | 0;
-	canvasWrap.style.height = w + 'px';
-	yAxis.style.height = w + 'px';
-	//container.style.maxHeight = (w + axisThick) + 'px';
-	//graph.style.height = (w + axisThick) + 'px';
+	points.push(p);
+	
+	console.log(p);
+	draw.points([p]);
 });
 
 
 
-/*
+const yAxis = document.querySelector('.graph .y-axis');
+const canvasWrap = document.querySelector('.graph .canvas-wrapper');
+const canvasWrapStyle = window.getComputedStyle(canvasWrap, null);
+
+const draw = new Draw(canvas, xMin, xMax, yMin, yMax);
+
+resizeGraph();
+window.addEventListener('resize', resizeGraph);
+
+function resizeGraph() {
+	let w = parseFloat(canvasWrapStyle.getPropertyValue('width'));
+	let paddingX = parseFloat(canvasWrapStyle.getPropertyValue('padding-left'));
+	let paddingY = parseFloat(canvasWrapStyle.getPropertyValue('padding-top'));
+	
+	let h = w - 2*paddingX + 2*paddingY;
+	canvasWrap.style.height = h + 'px';
+	yAxis.style.height = h + 'px';
+	
+	canvas.width = canvas.scrollWidth;
+	canvas.height = canvas.scrollHeight;
+	
+	draw.points(points);
+}
+
+
+
+points.push([2,1], [10,5], [3,7]);
+
+
 var gmm = new GMM({
 	dimensions: 2,
 	bufferSize: 1000,
@@ -48,13 +60,25 @@ var gmm = new GMM({
 	]	
 });
 
-gmm.addPoint([2,1]);
-gmm.addPoint([10,5]);
-gmm.addPoint([3,7]);
+//gmm.addPoint([2,1]);
+//gmm.addPoint([10,5]);
+//gmm.addPoint([3,7]);
+
+points.forEach(function(p) {gmm.addPoint(p)});
+
+draw.points(points);
+
+//draw.ellipse(gmm.means[0], gmm.covariances[0]);
+//draw.ellipse(gmm.means[1], gmm.covariances[1]);
+//draw.ellipse(gmm.means[2], gmm.covariances[2]);
 
 gmm.runEM(1);
+
+draw.ellipse(gmm.means[0], gmm.covariances[0]);
+draw.ellipse(gmm.means[1], gmm.covariances[1]);
+draw.ellipse(gmm.means[2], gmm.covariances[2]);
+
 
 console.log(gmm.weights);
 console.log(gmm.means);
 console.log(gmm.covariances);
-*/

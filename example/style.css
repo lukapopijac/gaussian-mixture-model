@@ -29,57 +29,58 @@ body {
 }
 .graph {
 	padding: 20px;
-	background: pink;
+	/*background: pink;*/
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-content: flex-start;
-	font-size: 12px;
+	font-size: 11px;
 }
 
 .graph .y-axis {
-	width: 50px;
-	background: green;
+	width: 32px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
-	padding: 3px 0;
+	justify-content: space-between;
 }
 .graph .canvas-wrapper {
 	flex: 1;
-	background: grey;
-	padding: 4.5454%;  /*  100%/22  */
+	padding: 7px 14px;
 }
 .graph .x-axis {
 	width: 100%;
-	height: 30px;
-	margin-left: 50px;  /* the same as y-axis width */
-	background: green;
+	height: 17px;
+	margin-left: 32px;  /* the same as y-axis width */
 	display: flex;
-	padding: 0 2px;
+	justify-content: space-between;
 }
 
 .graph .x-axis > div {
-	flex-basis: 34px;
-	border: 1px solid white;
+	flex-basis: 28px;
+/*	border: 1px solid white;*/
 }
 .graph .y-axis > div {
 	text-align: end;
+/*	border: 1px solid white;*/
 }
 
 
 
 
 .graph canvas {
-	border: 1px dashed blue;
+	border: 1px solid #666;
 	width: 100%;
 	height: 100%;
+	transform: scale(1, -1);
+	background-image: url(grid.svg);
+	background-color: white;
 }
 
 
 @media screen and (min-width: 700px) {
 	.container > .graph {
 		width: 60%;
+		font-size: 12px;
 	}
 	.container > .controls-top {
 		width: 40%;
@@ -93,3 +94,16 @@ body {
 		top: 200px;
 	}
 }
+
+/*
+@media screen and (max-width: 420px) {
+	.graph .canvas-wrapper {
+		flex: 1;
+		background: grey;
+		padding: 10px 13px;
+	}
+	.graph .x-axis > div {
+		flex-basis: 26px;
+	}
+}
+*/
