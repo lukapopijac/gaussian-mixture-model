@@ -8,16 +8,17 @@
 		<link rel="stylesheet" href="style.css" />
 		<script src="gmm.js"></script>
 		<script src="draw.js" defer></script>
+		<script src="controls.js" defer></script>
 		<script src="main.js" defer></script>
 	</head>
 	<body>
 		<h1>Gaussian Mixture Model Demo</h1>
 		<div class="container">
 			<div class="controls-top">
-				<button>Clear All</button>
+				<button id="btn-clear">Clear All</button>
 				<br>
 				Click on the graph to add 
-				<select>
+				<select id="number-of-points">
 					<option>1</option>
 					<option>5</option>
 					<option>20</option>
@@ -59,7 +60,7 @@
 			
 			<div class="controls-bottom">
 				Clusters:
-				<select>
+				<select id="number-of-clusters">
 					<option>1</option>
 					<option>2</option>
 					<option>3</option>
@@ -68,9 +69,9 @@
 					<option>6</option>
 					<option>7</option>
 				</select>
-				<button>Initialize Clusters</button>
+				<button id="btn-init-clusters">Initialize Clusters</button>
 				<br>
-				<button>Run</button> next
+				<button id="btn-run">Run</button> next
 				<select>
 					<option>1</option>
 					<option>10</option>

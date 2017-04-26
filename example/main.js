@@ -5,7 +5,7 @@ const xMin = -100, xMax = 100;
 const yMin = -100, yMax = 100;
 
 const points = [];
-let gmm;
+let gmm = null;
 
 points.push([-48,67],[-34,-61],[53,14],[49,5],[58,10],[-48,61],[-42,59],[-37,67],[-52,74],[-59,79],[-65,93],[-68,78],[-59,69],[-48,73],[-40,78],[-54,85],[-35,-50],[-48,-42],[-41,-58],[-37,-57],[-42,-50],[-38,-38],[-33,-45],[-22,-59],[-23,-63],[-28,-66],[-30,-50],[-49,-47],[-44,-59],[-38,-69],[-30,-58],[45,11],[40,4],[34,-3],[33,-12],[39,-20],[46,-24],[58,-25],[69,-18],[71,-14],[69,-4],[65,4],[59,5],[52,0],[44,-5],[54,-18],[62,-14],[59,-7],[56,-6],[43,-12],[48,-10],[-48,80],[-74,88],[-86,92],[-77,86],[-63,88],[-87,77],[-73,86],[-80,83],[-74,78],[-63,71],[-42,-45],[-50,-51]);
 
@@ -68,44 +68,6 @@ function redraw() {
 	}
 }
 
-
-
-function initializeGmm(clusters) {
-	let means = Array(clusters);
-	let covariances = Array(clusters);
-	for(let i=0; i<clusters; i++) {
-		means[i] = [
-			xMin + Math.random()*(xMax-xMin),
-			yMin + Math.random()*(yMax-yMin)
-		];
-		covariances[i] = [
-			[(xMax-xMin)*(xMax-xMin)*.01, 0],
-			[0, (yMax-yMin)*(yMax-yMin)*.01]
-		];
-	}
-	
-	gmm = new GMM({
-		dimensions: 2,
-		bufferSize: 1000,
-		weights: Array(clusters).fill(1/clusters),
-		means,
-		covariances		
-	});
-	
-	points.forEach(p => gmm.addPoint(p));
-	
-	redraw();
-}
-
-
-
-function runIterations() {   // on 'Run' button click
-	if(gmm) {
-		let iterations = 1;  // TODO: get from drop-down-list
-		gmm.runEM(iterations);
-	}
-	redraw();
-}
 
 
 
