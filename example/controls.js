@@ -5,29 +5,27 @@ document.getElementById('btn-clear').addEventListener('click', function() {
 });
 
 document.getElementById('btn-run').addEventListener('click', function() {
-	if(gmm) {
-		let iterations = 1;  // TODO: get from drop-down-list
-		gmm.runEM(iterations);
-	}
+	gmm ? gmm.runEM() : initializeGmm();
 	redraw();
 });
 
 document.getElementById('btn-init-clusters').addEventListener('click', function() {
+	initializeGmm();
+	redraw();
+});
+
+function initializeGmm() {
 	let sel = document.getElementById('number-of-clusters');
 	let clusters = Number(sel.options[sel.selectedIndex].text);
 	
-	let means = Array(clusters);
-	let covariances = Array(clusters);
-	for(let i=0; i<clusters; i++) {
-		means[i] = [
-			xMin + Math.random()*(xMax-xMin),
-			yMin + Math.random()*(yMax-yMin)
-		];
-		covariances[i] = [
-			[(xMax-xMin)*(xMax-xMin)*.01, 0],
-			[0, (yMax-yMin)*(yMax-yMin)*.01]
-		];
-	}
+	let dx = xMax-xMin;
+	let dy = yMax-yMin;
+	
+	let means = Array(clusters).fill(0)
+		.map(_ => [xMin + Math.random()*dx, yMin + Math.random()*dy]);
+	
+	let covariances = Array(clusters).fill(0)
+		.map(_ => [[dx*dx*.01, 0], [0, dy*dy*.01]]);
 	
 	gmm = new GMM({
 		dimensions: 2,
@@ -37,8 +35,5 @@ document.getElementById('btn-init-clusters').addEventListener('click', function(
 		covariances		
 	});
 	
-	points.forEach(p => gmm.addPoint(p));
-	
-	redraw();
-});
-
+	points.forEach(p => gmm.addPoint(p));	
+}

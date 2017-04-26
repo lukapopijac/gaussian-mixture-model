@@ -1,9 +1,9 @@
 'use strict';
 
 // from chi-square distribution
-const s50 = 2*Math.sqrt(1.38629);
-const s95 = 2*Math.sqrt(5.99146);
-const s99 = 2*Math.sqrt(9.21034);
+const s50 = Math.sqrt(1.38629);
+const s95 = Math.sqrt(5.99146);
+const s99 = Math.sqrt(9.21034);
 
 class Draw {
 	constructor(canvas, xMin, xMax, yMin, yMax) {
@@ -54,8 +54,8 @@ class Draw {
 		let G = Math.sqrt(T*T*.25-a*d+b*b);
 		let lambda1 = .5*T + G;
 		let lambda2 = .5*T - G;
-		let r1 = Math.sqrt(lambda1)*s50;
-		let r2 = Math.sqrt(lambda2)*s50;
+		let r1 = Math.sqrt(lambda1)*s95;
+		let r2 = Math.sqrt(lambda2)*s95;
 		
 		// points to pixels (this probably works only for square grid)
 		let r1pix = r1 * this.canvas.width  * this.xRangeInv;
