@@ -1,7 +1,7 @@
 'use strict';
 
-const s95 = 2*Math.sqrt(5.991);
-const s99 = 2*Math.sqrt(9.21);
+const s95 = 2/*2*Math.sqrt(5.991);*/
+const s99 = 2/*2*Math.sqrt(9.21); */
 
 class Draw {
 	constructor(canvas, xMin, xMax, yMin, yMax) {
@@ -15,10 +15,10 @@ class Draw {
 		this.ctx = canvas.getContext('2d');
 	}
 	
-	_point2pixel(point, w, h) {
+	_point2pixel(point) {
 		return {
-			x: w*this.xRangeInv*(point[0]-this.xMin),
-			y: h*this.yRangeInv*(point[1]-this.yMin)
+			x: this.canvas.width  * this.xRangeInv*(point[0]-this.xMin),
+			y: this.canvas.height * this.yRangeInv*(point[1]-this.yMin)
 		};		
 	}
 	
@@ -33,7 +33,7 @@ class Draw {
 
 			this.ctx.beginPath();
 			
-			let {x, y} = this._point2pixel(p, w, h);
+			let {x, y} = this._point2pixel(p);
 			this.ctx.arc(x, y, 3, 0, 2*Math.PI);
 			
 			this.ctx.fill();
@@ -42,25 +42,34 @@ class Draw {
 	}
 	
 	ellipse(mean, covariance) {   // assuming cov matrix is symmetric
+		let w = this.canvas.width;
+		let h = this.canvas.height;
 		let a = covariance[0][0];
 		let b = covariance[0][1];
 		let d = covariance[1][1];
 		
 		let T = a+d;
-		let G = Math.sqrt(T*T*.25-a*d-b*b);
+		let G = Math.sqrt(T*T*.25-a*d+b*b);
 		let lambda1 = .5*T + G;
 		let lambda2 = .5*T - G;
-		let r1 = Math.sqrt(lambda1)*s99;
-		let r2 = Math.sqrt(lambda2)*s99;
+		let r1 = Math.sqrt(lambda1)*s95;
+		let r2 = Math.sqrt(lambda2)*s95;
+		
+		// points to pixels (this probably works only for square grid)
+		let r1pix = r1 * this.canvas.width  * this.xRangeInv;
+		let r2pix = r2 * this.canvas.height * this.yRangeInv;
+		
+		console.log(r1, r2);
+		console.log(r1pix, r2pix);
 		
 		let theta = Math.atan2(b, lambda1-d);
 		
-		let {x, y} = this._point2pixel(mean, this.canvas.width, this.canvas.height);
+		let {x, y} = this._point2pixel(mean);
 		
 		this.ctx.strokeStyle = 'black';
 		this.ctx.strokeWidth = '5px';
 		this.ctx.beginPath();
-		this.ctx.ellipse(x, y, r1, r2, theta, 0, 2*Math.PI);
+		this.ctx.ellipse(x, y, r1pix, r2pix, theta, 0, 2*Math.PI);
 		this.ctx.stroke();
 	}
 };
