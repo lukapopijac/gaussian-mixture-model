@@ -4,7 +4,6 @@ html {
 *, *:before, *:after {
 	box-sizing: inherit;
 }
-
 body {
 	margin: 0;
 	background-color: #e9ddaf;
@@ -12,8 +11,14 @@ body {
 	margin: 0 auto;
 	font: 16px Verdana, Geneva, sans-serif;
 	max-width: 980px;
-	/*letter-spacing: 0.1px;*/
 }
+h1 {
+	font: 32px sans-serif;
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 30px;
+}
+
 
 
 .container {
@@ -94,16 +99,3 @@ body {
 		top: 200px;
 	}
 }
-
-/*
-@media screen and (max-width: 420px) {
-	.graph .canvas-wrapper {
-		flex: 1;
-		background: grey;
-		padding: 10px 13px;
-	}
-	.graph .x-axis > div {
-		flex-basis: 26px;
-	}
-}
-*/
