@@ -66,7 +66,7 @@ class Draw {
 		let {x, y} = this._point2pixel(mean);
 		
 		this.ctx.strokeStyle = 'black';
-		this.ctx.strokeWidth = '5px';
+		this.ctx.lineWidth = 2;
 		this.ctx.beginPath();
 		this.ctx.ellipse(x, y, r1pix, r2pix, theta, 0, 2*Math.PI);
 		this.ctx.stroke();
