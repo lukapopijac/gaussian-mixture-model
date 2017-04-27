@@ -7,19 +7,20 @@ html {
 body {
 	margin: 0;
 	background-color: #e9ddaf;
-	text-align: center;
 	margin: 0 auto;
-	font: 16px Verdana, Geneva, sans-serif;
+	font: 12px Verdana, Geneva, sans-serif;
 	max-width: 980px;
+	line-height: 40px;
 }
 h1 {
-	font: 32px sans-serif;
+	font: calc(3vw + 10px) sans-serif;
 	text-align: center;
 	margin-top: 40px;
-	margin-bottom: 30px;
+	margin-bottom: 18px;
 }
-
-
+p {margin: 18px 0;}
+/*p:first-child {margin-top: 5px;}
+p:last-child {margin-bottom: 5px;}*/
 
 .container {
 	max-width: 1200px;
@@ -27,13 +28,59 @@ h1 {
 }
 
 .controls-top {
-	background: yellow;
+	text-align: center;
+	/*border: 1px solid grey;*/
 }
 .controls-bottom {
-	background: aqua;
+	text-align: center;
+	margin-top: 8px;
+	/*border: 1px solid grey;*/
 }
+
+button {
+	background-image: linear-gradient(#1b1dff, #0002cd 50%, #0002b9);
+	border: 1px solid #00029a;
+	background-color: #0002cd;
+	border-radius: 4px;
+	padding: 10px 15px;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: bold;
+	color: #eee;
+	font-family: sans-serif;
+}
+button:hover {
+	background-image: linear-gradient(#0609ff, #0002b9 50%, #0002a4);
+	border: 1px solid #000186;
+	background-color: #00029a;
+	cursor: pointer;
+}
+button:active {
+	background-image: none;
+	background-color: #00029a;
+    border-color: #000190;
+}
+button#btn-run {
+	margin-top: 12px;
+}
+#number-of-clusters {
+	margin-right: 14px;
+}
+
+select {
+	user-select: none;
+	background-image: linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	color: #555;
+	font-size: inherit;
+	padding: 5px 10px;
+	margin: 0 3px;
+}
+
+
 .graph {
-	padding: 20px;
+	padding: 0px;
 	/*background: pink;*/
 	display: flex;
 	flex-direction: row;
@@ -47,6 +94,7 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	line-height: 12px;
 }
 .graph .canvas-wrapper {
 	flex: 1;
@@ -58,15 +106,17 @@ h1 {
 	margin-left: 32px;  /* the same as y-axis width */
 	display: flex;
 	justify-content: space-between;
+	line-height: 12px;
 }
 
 .graph .x-axis > div {
 	flex-basis: 28px;
-/*	border: 1px solid white;*/
+	text-align: center;
+	/*border: 1px solid white;*/
 }
 .graph .y-axis > div {
 	text-align: end;
-/*	border: 1px solid white;*/
+	/*border: 1px solid white;*/
 }
 
 
@@ -82,7 +132,13 @@ h1 {
 }
 
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 641px) {
+	body {
+		font-size: 16px;
+	}
+	h1 {
+		font-size: 32px;
+	}
 	.container > .graph {
 		width: 60%;
 		font-size: 12px;
@@ -96,6 +152,6 @@ h1 {
 		width: 40%;
 		position: absolute;
 		right: 0;
-		top: 200px;
+		top: 180px;
 	}
 }
