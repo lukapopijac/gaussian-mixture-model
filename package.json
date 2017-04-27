@@ -1,6 +1,6 @@
 {
   "name": "gaussian-mixture-model",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Multivariate Gaussian mixture model for real-time data",
   "main": "index.js",
   "scripts": {},
