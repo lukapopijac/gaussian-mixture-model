@@ -4,15 +4,19 @@ document.getElementById('btn-clear').addEventListener('click', function() {
 	redraw();
 });
 
-document.getElementById('btn-run').addEventListener('click', function() {
-	gmm ? gmm.runEM() : initializeGmm();
-	redraw();
-});
+document.getElementById('btn-run-a').addEventListener('click', _ => run(1));
+document.getElementById('btn-run-b').addEventListener('click', _ => run(10));
 
 document.getElementById('btn-init-clusters').addEventListener('click', function() {
 	initializeGmm();
 	redraw();
 });
+
+
+function run(iterations) {
+	gmm ? gmm.runEM(iterations) : initializeGmm();
+	redraw();	
+}
 
 function initializeGmm() {
 	let sel = document.getElementById('number-of-clusters');

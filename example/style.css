@@ -8,15 +8,14 @@ body {
 	margin: 0;
 	background-color: #e9ddaf;
 	margin: 0 auto;
-	font: 12px Verdana, Geneva, sans-serif;
+	font: 13px Verdana, Geneva, sans-serif;
 	max-width: 980px;
 	line-height: 40px;
 }
 h1 {
 	font: calc(3vw + 10px) sans-serif;
-	text-align: center;
-	margin-top: 40px;
-	margin-bottom: 18px;
+	letter-spacing: -.3px;
+	margin: 18px calc(6% - 13px);
 }
 p {margin: 18px 0;}
 /*p:first-child {margin-top: 5px;}
@@ -27,13 +26,8 @@ p:last-child {margin-bottom: 5px;}*/
 	position: relative;
 }
 
-.controls-top {
+.controls {
 	text-align: center;
-	/*border: 1px solid grey;*/
-}
-.controls-bottom {
-	text-align: center;
-	margin-top: 8px;
 	/*border: 1px solid grey;*/
 }
 
@@ -42,9 +36,9 @@ button {
 	border: 1px solid #00029a;
 	background-color: #0002cd;
 	border-radius: 4px;
-	padding: 10px 15px;
+	padding: 9px 14px;
 	text-decoration: none;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: bold;
 	color: #eee;
 	font-family: sans-serif;
@@ -60,8 +54,8 @@ button:active {
 	background-color: #00029a;
     border-color: #000190;
 }
-button#btn-run {
-	margin-top: 12px;
+button.btn-run {
+	margin: 12px 5px 20px;
 }
 #number-of-clusters {
 	margin-right: 14px;
@@ -87,6 +81,7 @@ select {
 	flex-wrap: wrap;
 	align-content: flex-start;
 	font-size: 11px;
+	margin-bottom: 10px;
 }
 
 .graph .y-axis {
@@ -133,25 +128,26 @@ select {
 
 
 @media screen and (min-width: 641px) {
-	body {
-		font-size: 16px;
-	}
 	h1 {
 		font-size: 32px;
+		text-align: center;
+		margin-top: 36px;
+		margin-bottom: 24px;
 	}
 	.container > .graph {
-		width: 60%;
+		width: calc(100% - 325px);
 		font-size: 12px;
 	}
-	.container > .controls-top {
-		width: 40%;
+	.container > .controls {
+		width: 325px;
 		position: absolute;
 		right: 0;
+		font-size: 14px;
+	}
+	.container > .controls-top {
+		top: 11%;
 	}
 	.container > .controls-bottom {
-		width: 40%;
-		position: absolute;
-		right: 0;
-		top: 180px;
+		top: calc(16% + 100px);
 	}
 }
