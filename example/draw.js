@@ -31,19 +31,20 @@ class Draw {
 			let p = points[i];
 			this.ctx.lineWidth = .2;
 			this.ctx.strokeStyle = 'black';
-			this.ctx.fillStyle = 'red';
+			this.ctx.fillStyle = colors ? colors[i] : 'grey';
 
 			this.ctx.beginPath();
 			
 			let {x, y} = this._point2pixel(p);
-			this.ctx.arc(x, y, 3, 0, 2*Math.PI);
+			this.ctx.arc(x, y, 3.5, 0, 2*Math.PI);
 			
 			this.ctx.fill();
 			this.ctx.stroke();
 		}
 	}
 	
-	ellipse(mean, covariance) {   // assuming cov matrix is symmetric
+	ellipse(mean, covariance, color) {   // assuming cov matrix is symmetric
+		if(!color) color = 'black';
 		let w = this.canvas.width;
 		let h = this.canvas.height;
 		let a = covariance[0][0];
@@ -65,10 +66,14 @@ class Draw {
 		
 		let {x, y} = this._point2pixel(mean);
 		
-		this.ctx.strokeStyle = 'black';
-		this.ctx.lineWidth = 2;
+		this.ctx.globalAlpha = .7;
+		this.ctx.strokeStyle = color;
+		this.ctx.fillStyle = color;
+		this.ctx.lineWidth = 3;
 		this.ctx.beginPath();
 		this.ctx.ellipse(x, y, r1pix, r2pix, theta, 0, 2*Math.PI);
+		//this.ctx.fill();
 		this.ctx.stroke();
+		this.ctx.globalAlpha = 1;
 	}
 };
