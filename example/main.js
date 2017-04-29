@@ -67,8 +67,6 @@ function redraw() {
 
 
 
-
-
 //points.push([2,1], [10,5], [3,7]);
 
 

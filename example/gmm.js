@@ -49,7 +49,17 @@ module.exports = class {
 	}	
 	
 	predict(point) {
-		
+		let s = 0;
+		let resps = Array(this.clusters);
+		for(let k=0; k<this.clusters; k++) {
+			let weight = this.weights[k];
+			let mean = this.means[k];
+			let cov = this.covariances[k];
+			s += resps[k] = weight * pdf(point, mean, cov);
+		}
+		let sInv = 1/s;
+		for(let k=0; k<this.clusters; k++) resps[k] *= sInv;
+		return resps;
 	}
 };
 
