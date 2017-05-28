@@ -23,10 +23,23 @@ points.push([-49,64],[-48,57],[-44,58],[-42,52],[-37,45],[-37,49],[-40,55],[-34,
 canvas.addEventListener('click', function(e) {
 	let w = canvas.width;
 	let h = canvas.height;
+	
 	let p = [e.offsetX/w*(xMax-xMin) + xMin, e.offsetY/h*(yMax-yMin) + yMin];
 
-	points.push(p);
-	if(gmm) gmm.addPoint(p);
+	let sel = document.getElementById('number-of-points');
+	let n = Number(sel.options[sel.selectedIndex].text);  // number of points
+	
+	if(n==1) {
+		points.push(p);
+		if(gmm) gmm.addPoint(p);
+	} else for(let i=0; i<n; i++) {
+		let alpha = Math.random()*2*Math.PI/n + i/n*2*Math.PI;
+		let r = Math.random()*(xMax-xMin)*.04;
+		let q = [p[0] + r*Math.cos(alpha), p[1] + r*Math.sin(alpha)];
+		points.push(q);
+		if(gmm) gmm.addPoint(q);
+	}
+	
 	redraw();
 });
 

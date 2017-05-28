@@ -39,5 +39,5 @@ function initializeGmm() {
 		covariances		
 	});
 	
-	points.forEach(p => gmm.addPoint(p));	
+	points.forEach(p => gmm.addPoint(p));
 }
