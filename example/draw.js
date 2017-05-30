@@ -76,4 +76,68 @@ class Draw {
 		this.ctx.stroke();
 		this.ctx.globalAlpha = 1;
 	}
+	
+	singularity(point) {
+		let w = this.canvas.width;
+		let h = this.canvas.height;
+		let {x, y} = this._point2pixel(point);
+		
+		let margin = 4;    // space between balloon and border of the canvas
+		let padding = 14;  // space between text and border of the balloon
+		let radius = 7;    // corner radius of the balloon
+		let txt = 'SINGULARITY';
+		let textHeight = 20;
+		this.ctx.font = 'bold ' + textHeight + 'px sans-serif';
+		let textWidth = this.ctx.measureText(txt).width;
+		this.ctx.scale(1,-1);
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = 'middle';
+		
+		let sgn = y<.5*h ? 1 : -1;  // is balloon above or below the singular point
+		
+		// calculate center of the text
+		let textY = y+100*sgn;
+		let textX = x<.5*w ? x+.5*textWidth : x-.5*textWidth;
+		if(textX+.5*textWidth+padding+margin>w) textX = w-.5*textWidth-padding-margin;
+		if(textX-.5*textWidth-padding-margin<0) textX = .5*textWidth+padding+margin;
+		if(textY-.5*textHeight-padding-margin<0) textY = .5*textHeight+padding+margin;
+		if(textY+.5*textHeight+padding+margin>h) textY = h-.5*textHeight-padding-margin;
+		
+		// draw balloon
+		this.ctx.beginPath();
+		this.ctx.moveTo(x, -y);
+		this.ctx.lineTo(textX-15, -textY+(.5*textHeight+padding)*sgn);
+		this.ctx.lineTo(textX-.5*textWidth-padding+radius, -textY+(.5*textHeight+padding)*sgn);
+		this.ctx.arcTo(
+			textX-.5*textWidth-padding, -textY+(.5*textHeight+padding)*sgn, 
+			textX-.5*textWidth-padding, -textY+(.5*textHeight+padding-radius)*sgn, 
+			radius
+		);
+		this.ctx.lineTo(textX-.5*textWidth-padding, -textY+(-.5*textHeight-padding+radius)*sgn);
+		this.ctx.arcTo(
+			textX-.5*textWidth-padding, -textY+(-.5*textHeight-padding)*sgn, 
+			textX-.5*textWidth-padding+radius, -textY+(-.5*textHeight-padding)*sgn, 
+			radius
+		);
+		this.ctx.lineTo(textX+.5*textWidth+padding-radius, -textY+(-.5*textHeight-padding)*sgn);
+		this.ctx.arcTo(
+			textX+.5*textWidth+padding, -textY+(-.5*textHeight-padding)*sgn, 
+			textX+.5*textWidth+padding, -textY+(-.5*textHeight-padding+radius)*sgn, 
+			radius
+		);
+		this.ctx.lineTo(textX+.5*textWidth+padding, -textY+(.5*textHeight+padding-radius)*sgn);
+		this.ctx.arcTo(
+			textX+.5*textWidth+padding, -textY + (.5*textHeight + padding) * sgn, 
+			textX+.5*textWidth+padding-radius, -textY + (.5*textHeight + padding) * sgn, 
+			radius
+		);
+		this.ctx.lineTo(textX+15, -textY + (.5*textHeight + padding) * sgn);
+		this.ctx.closePath();
+		this.ctx.fillStyle = 'rgba(255,30,30,.85)';
+		this.ctx.fill();
+
+		// draw text
+		this.ctx.fillStyle = 'white';
+		this.ctx.fillText(txt, textX, -textY);
+	}
 };

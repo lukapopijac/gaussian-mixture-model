@@ -14,8 +14,13 @@ document.getElementById('btn-init-clusters').addEventListener('click', function(
 
 
 function run(iterations) {
-	gmm ? gmm.runEM(iterations) : initializeGmm();
-	redraw();	
+	if(gmm) {
+		if(gmm.singularity) return;
+		gmm.runEM(iterations);
+	} else {
+		initializeGmm();
+	}
+	redraw();
 }
 
 function initializeGmm() {

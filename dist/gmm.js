@@ -31,6 +31,9 @@ module.exports = class {
 		for(let k=0; k<this.clusters; k++) {
 			this.cResps[k] = new Float32Array(this.bufferSize);
 		}
+		
+		this.singularity = null;
+		this.covDeterminants = this.covariances.map(determinant);
 	}
 	
 	addPoint(point) {		
@@ -45,6 +48,19 @@ module.exports = class {
 		for(let i=0; i<iterations; i++) {
 			runExpectation.call(this);
 			runMaximization.call(this);
+			
+			// calculate determinants of covariances
+			for(let k=0; k<this.clusters; k++) {
+				this.covDeterminants[k] = determinant(this.covariances[k]);
+			}
+			
+			// detect singularities
+			for(let k=0; k<this.clusters; k++) {
+				if(this.covDeterminants[k] <= 0) {
+					this.singularity = this.means[k];
+					return this.singularity;					
+				}
+			}
 		}
 	}	
 	
@@ -55,7 +71,9 @@ module.exports = class {
 			let weight = this.weights[k];
 			let mean = this.means[k];
 			let cov = this.covariances[k];
-			s += resps[k] = weight * pdf(point, mean, cov);
+			let covDet = this.covDeterminants[k];
+			
+			s += resps[k] = weight * pdf(point, mean, cov, covDet);
 		}
 		let sInv = 1/s;
 		for(let k=0; k<this.clusters; k++) resps[k] *= sInv;
@@ -70,9 +88,10 @@ function runExpectation() {
 		let weight = this.weights[k];
 		let mean = this.means[k];
 		let cov = this.covariances[k];
+		let covDet = this.covDeterminants[k];
 
 		for(let i=0; i<this.dataLength; i++) {
-			this.tmpArr[i] += resps[i] = weight * pdf(this.data[i], mean, cov);
+			this.tmpArr[i] += resps[i] = weight * pdf(this.data[i], mean, cov, covDet);
 		}
 	}
 	
@@ -138,13 +157,11 @@ function runMaximization() {
 
 
 
-
-
 const ln2pi = Math.log(2*Math.PI);
 
-function pdf(x, mean, cov) {  // probability density function
+function pdf(x, mean, cov, covDet) {  // probability density function
 	let d = typeof x == 'number' ? 1 : x.length;
-	let detInv = 1/determinant(cov);     // TODO: this is not safe!
+	let detInv = covDet != null ? 1/covDet : 1/determinant(cov);     // TODO: this is not safe!
 	let mah2 = detInv * xmuAxmu(adjugate(cov), mean, x);   // mahalanobis^2
 	return Math.sqrt(detInv) * Math.exp(-.5*(mah2 + d*ln2pi));
 }

@@ -93,6 +93,8 @@ function redraw() {
 			draw.ellipse(gmm.means[i], gmm.covariances[i], clusterColors[i]);
 		}
 		draw.points(points, pointColors);
+		
+		if(gmm.singularity) draw.singularity(gmm.singularity);
 	} else {
 		draw.points(points);
 	}
