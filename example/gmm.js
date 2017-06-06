@@ -1,22 +1,13 @@
 var GMM = function(module){
 'use strict';
 
-/**
-important:
-This algorithm doesn't handle possible singularity issues. In case of
-singularities, result will contain bunch of NaN values.
-Example: If one of the gaussians is stuck at only one data point,
-         it will shrink to it and variances will converge to zero.
-*/
-
-
 module.exports = class {
 	constructor({dimensions, weights, means, covariances, bufferSize}) {
 		this.dimensions = dimensions;
 		this.clusters = means.length;
-		this.weights = weights ? weights : Array(this.clusters).fill(1/this.clusters);
-		this.means = means;
-		this.covariances = covariances;
+		this.weights = weights ? weights.slice() : Array(this.clusters).fill(1/this.clusters);
+		this.means = means.map(mu => mu.slice());
+		this.covariances = covariances.map(cov => cov.map(row => row.slice()));
 		this.bufferSize = bufferSize != null ? bufferSize : 1e6;
 		
 		this.data = Array(this.bufferSize);
