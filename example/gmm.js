@@ -152,7 +152,7 @@ const ln2pi = Math.log(2*Math.PI);
 
 function pdf(x, mean, cov, covDet) {  // probability density function
 	let d = typeof x == 'number' ? 1 : x.length;
-	let detInv = covDet != null ? 1/covDet : 1/determinant(cov);     // TODO: this is not safe!
+	let detInv = covDet != null ? 1/covDet : 1/determinant(cov);
 	let mah2 = detInv * xmuAxmu(adjugate(cov), mean, x);   // mahalanobis^2
 	return Math.sqrt(detInv) * Math.exp(-.5*(mah2 + d*ln2pi));
 }
@@ -205,5 +205,19 @@ function determinant(X) {
 	else {
 		// TODO
 	}
+}
+
+function cholesky(A) {
+	let L = Array(A.length);
+	for(let i=0; i<A.length; i++) {
+		let Li = L[i] = Array(i);
+		for(let j=0; j<i+1; j++) {
+			let Lj = L[j];
+			let s = A[i][j];
+			for(let k=0; k<j; k++) s -= Li[k]*Lj[k];
+			Li[j] = i==j ? Math.sqrt(s) : s/Lj[j];
+		}
+	}
+	return L;
 }
 return module.exports}({});
