@@ -24,6 +24,8 @@ module.exports = class {
 		}
 		
 		this.singularity = null;
+		
+		this.covCholeskies = null; // Choleskies = plural of Cholesky :)
 		this.covDeterminants = this.covariances.map(cov => determinant(cov));
 	}
 	
@@ -39,12 +41,21 @@ module.exports = class {
 		for(let i=0; i<iterations; i++) {
 			runExpectation.call(this);
 			runMaximization.call(this);
-			
+
+			// calculate Cholesky decompositions of covariances
+			if(this.dimensions > 3) {
+				this.covCholeskies = Array(this.clusters);
+				for(let k=0; k<this.clusters; k++) {
+					this.covCholeskies[k] = cholesky(this.covariances[k]);
+				}
+			}
+
 			// calculate determinants of covariances
 			for(let k=0; k<this.clusters; k++) {
-				this.covDeterminants[k] = determinant(this.covariances[k]);
+				let L = this.covCholeskies && this.covCholeskies[k];
+				this.covDeterminants[k] = determinant(this.covariances[k], L);
 			}
-			
+
 			// detect singularities
 			for(let k=0; k<this.clusters; k++) {
 				if(this.covDeterminants[k] <= 0) {
@@ -63,8 +74,9 @@ module.exports = class {
 			let mean = this.means[k];
 			let cov = this.covariances[k];
 			let covDet = this.covDeterminants[k];
+			let covCholesky = this.covCholeskies && this.covCholeskies[k];
 			
-			s += resps[k] = weight * pdf(point, mean, cov, covDet);
+			s += resps[k] = weight * pdf(point, mean, cov, covDet, covCholesky);
 		}
 		let sInv = 1/s;
 		for(let k=0; k<this.clusters; k++) resps[k] *= sInv;
@@ -80,9 +92,10 @@ function runExpectation() {
 		let mean = this.means[k];
 		let cov = this.covariances[k];
 		let covDet = this.covDeterminants[k];
-
+		let covCholesky = this.covCholeskies && this.covCholeskies[k];
+		
 		for(let i=0; i<this.dataLength; i++) {
-			this.tmpArr[i] += resps[i] = weight * pdf(this.data[i], mean, cov, covDet);
+			this.tmpArr[i] += resps[i] = weight * pdf(this.data[i], mean, cov, covDet, covCholesky);
 		}
 	}
 	
@@ -150,13 +163,14 @@ function runMaximization() {
 const ln2pi = Math.log(2*Math.PI);
 
 function pdf(x, mean, cov, covDet, covCholesky) {  // probability density function
+	// covDet and covCholesky are optional parameters
 	let d = typeof x == 'number' ? 1 : x.length;
 	let detInv, mah2;  //  1/det, mahalanobis^2
 	if(d<4) {
 		detInv = covDet != null ? 1/covDet : 1/determinant(cov);
 		mah2 = detInv * xmuAxmu(adjugate(cov), mean, x);
 	} else {
-		let L = cholesky(cov);
+		let L = covCholesky || cholesky(cov);
 		detInv = covDet != null ? 1/covDet : 1/determinant(cov, L);
 		mah2 = xmuAxmu(inverseFromCholesky(L), mean, x);
 	}
@@ -197,7 +211,7 @@ function adjugate(X) {  // works only for X.length <= 3
 	}
 }
 
-function determinant(X, choleskyL) {
+function determinant(X, choleskyL) {  // choleskyL is optional parameter
 	if(typeof X == 'number') return X;
 	else if(X.length==1) return X[0][0];
 	else if(X.length==2) return X[0][0]*X[1][1]-X[0][1]*X[1][0];
