@@ -30,7 +30,6 @@ Simple Example
 ```javascript
 // initialize model
 var gmm = new GMM({
-	dimensions: 2,
 	weights: [0.5, 0.5],
 	means: [[-25, 40], [-60, -30]],
 	covariances: [

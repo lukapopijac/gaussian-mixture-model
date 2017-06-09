@@ -2,8 +2,8 @@ var GMM = function(module){
 'use strict';
 
 module.exports = class {
-	constructor({dimensions, weights, means, covariances, bufferSize}) {
-		this.dimensions = dimensions;
+	constructor({weights, means, covariances, bufferSize}) {
+		this.dimensions = means[0].length;
 		this.clusters = means.length;
 		this.weights = weights ? weights.slice() : Array(this.clusters).fill(1/this.clusters);
 		this.means = means.map(mu => mu.slice());
