@@ -23,7 +23,7 @@ module.exports = class {
 		}
 		
 		this.singularity = null;
-		this.covDeterminants = this.covariances.map(determinant);
+		this.covDeterminants = this.covariances.map(cov => determinant(cov));
 	}
 	
 	addPoint(point) {		
@@ -146,13 +146,19 @@ function runMaximization() {
 }
 
 
-
 const ln2pi = Math.log(2*Math.PI);
 
-function pdf(x, mean, cov, covDet) {  // probability density function
+function pdf(x, mean, cov, covDet, covCholesky) {  // probability density function
 	let d = typeof x == 'number' ? 1 : x.length;
-	let detInv = covDet != null ? 1/covDet : 1/determinant(cov);
-	let mah2 = detInv * xmuAxmu(adjugate(cov), mean, x);   // mahalanobis^2
+	let detInv, mah2;  //  1/det, mahalanobis^2
+	if(d<4) {
+		detInv = covDet != null ? 1/covDet : 1/determinant(cov);
+		mah2 = detInv * xmuAxmu(adjugate(cov), mean, x);
+	} else {
+		let L = cholesky(cov);
+		detInv = covDet != null ? 1/covDet : 1/determinant(cov, L);
+		mah2 = xmuAxmu(inverseFromCholesky(L), mean, x);
+	}
 	return Math.sqrt(detInv) * Math.exp(-.5*(mah2 + d*ln2pi));
 }
 
@@ -171,7 +177,7 @@ function xmuAxmu(A, mu, x) {  // calculate (x-mu)'*A*(x-mu)
 	return s;
 }
 
-function adjugate(X) {
+function adjugate(X) {  // works only for X.length <= 3
 	if(typeof X == 'number') return 1;
 	else if(X.length==1) return [1];
 	else if(X.length==2) return [
@@ -187,12 +193,10 @@ function adjugate(X) {
 			[f*g-d*i, a*i-c*g, c*d-a*f],
 			[d*h-e*g, b*g-a*h, a*e-b*d]
 		];
-	} else {
-		// TODO
 	}
 }
 
-function determinant(X) {
+function determinant(X, choleskyL) {
 	if(typeof X == 'number') return X;
 	else if(X.length==1) return X[0][0];
 	else if(X.length==2) return X[0][0]*X[1][1]-X[0][1]*X[1][0];
@@ -201,9 +205,10 @@ function determinant(X) {
 		X[0][1] * (X[1][2]*X[2][0] - X[1][0]*X[2][2]) +
 		X[0][2] * (X[1][0]*X[2][1] - X[1][1]*X[2][0])
 	);
-	else {
-		// TODO
-	}
+	let r = 1;
+	let L = choleskyL || cholesky(X);
+	for(let i=0; i<A.length; i++) r *= L[i][i];
+	return r*r;
 }
 
 function cholesky(A) {
@@ -218,4 +223,8 @@ function cholesky(A) {
 		}
 	}
 	return L;
+}
+
+function inverseFromCholesky(L) {
+	// TODO
 }
