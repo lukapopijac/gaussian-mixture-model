@@ -172,7 +172,7 @@ function pdf(x, mean, cov, covDet, covCholesky) {  // probability density functi
 	} else {
 		let L = covCholesky || cholesky(cov);
 		detInv = covDet != null ? 1/covDet : 1/determinant(cov, L);
-		mah2 = xmuAxmu(inverseFromCholesky(L), mean, x);
+		mah2 = xmuAxmu(inverse(cov, L), mean, x);
 	}
 	return Math.sqrt(detInv) * Math.exp(-.5*(mah2 + d*ln2pi));
 }
@@ -229,7 +229,7 @@ function determinant(X, choleskyL) {  // choleskyL is optional parameter
 function cholesky(A) {
 	let L = Array(A.length);
 	for(let i=0; i<A.length; i++) {
-		let Li = L[i] = Array(i);
+		let Li = L[i] = Array(i+1);
 		for(let j=0; j<i+1; j++) {
 			let Lj = L[j];
 			let s = A[i][j];
@@ -240,7 +240,33 @@ function cholesky(A) {
 	return L;
 }
 
-function inverseFromCholesky(L) {
-	// TODO
+function inverse(A, choleskyL) {  // choleskyL is optional
+	let L = choleskyL || cholesky(A);
+	let X = lowerTriangularInverse(L);
+	let n = L.length;
+	for(let i=0; i<n; i++) {
+		for(let j=0; j<=i; j++) {
+			let s = 0;
+			for(let k=i; k<n; k++) s += X[k][i]*X[k][j];
+			X[i][j] = s;
+			X[j][i] = s;
+		}
+	}
+	return X;
+}
+
+function lowerTriangularInverse(L) {  // L must be lower-triangular
+	let n = L.length;
+	let X = Array(n);
+	for(let i=0; i<n; i++) X[i] = Array(n);
+	for(let k=0; k<n; k++) {
+		X[k][k] = 1/L[k][k];
+		for(let i=k+1; i<n; i++) {
+			let s = 0;
+			for(let j=k; j<i; j++) s -= L[i][j]*X[j][k];
+			X[i][k] = s/L[i][i];
+		}
+	}
+	return X;
 }
 return module.exports}({});
