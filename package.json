@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/lukapopijac/gaussian-mixture-model/issues"
   },
-  "homepage": "https://github.com/lukapopijac/gaussian-mixture-model#readme"
+  "homepage": "https://github.com/lukapopijac/gaussian-mixture-model#readme",
+  "devDependencies": {
+    "browserify": "^14.4.0"
+  }
 }

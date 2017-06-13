@@ -2,19 +2,16 @@
 
 const fs = require('fs');
 const path = require('path');
+const browserify = require('browserify');
 
 // create destination folder if it doesn't exist
 if(!fs.existsSync('dist')) fs.mkdirSync('dist');
 
-function wrapForBrowser(code) {
-	return 'var GMM = function(module){\n' + code + 'return module.exports}({});';
-}
+var b = browserify({debug: false})
+	.require('./browser.js', {entry: true})
+	.bundle()
+	.on('error', err => {console.log(err)})
+;
 
-let source = fs.readFileSync('index.js');
-
-//fs.writeFileSync(path.join('package', 'index.js'), source);
-fs.writeFileSync(path.join('dist', 'gmm.js'), wrapForBrowser(source));
-fs.writeFileSync(path.join('example', 'gmm.js'), wrapForBrowser(source));
-
-// copy package.json
-//fs.writeFileSync(path.join('package', 'package.json'), fs.readFileSync('package.json'));
+b.pipe(fs.createWriteStream(path.join('dist', 'gmm.js')));
+b.pipe(fs.createWriteStream(path.join('example', 'gmm.js')));
