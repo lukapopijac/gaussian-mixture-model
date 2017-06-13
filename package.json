@@ -31,5 +31,8 @@
   "homepage": "https://github.com/lukapopijac/gaussian-mixture-model#readme",
   "devDependencies": {
     "browserify": "^14.4.0"
+  },
+  "dependencies": {
+    "cholesky-tools": "^0.1.3"
   }
 }
