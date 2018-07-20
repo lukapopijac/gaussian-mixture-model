@@ -72,7 +72,6 @@ module.exports = class {
 	}	
 	
 	predict(point) {
-		let s = 0;
 		let resps = Array(this.clusters);
 		for(let k=0; k<this.clusters; k++) {
 			let weight = this.weights[k];
@@ -81,8 +80,15 @@ module.exports = class {
 			let covDet = this.covDeterminants[k];
 			let covCholesky = this.covCholeskies && this.covCholeskies[k];
 			
-			s += resps[k] = weight * pdf(point, mean, cov, covDet, covCholesky);
+			resps[k] = weight * pdf(point, mean, cov, covDet, covCholesky);
 		}
+		return resps;
+	}
+
+	predictNormalize(point) {
+		let resps = this.predict(point);
+		let s = 0;
+		for(let k=0; k<this.clusters; k++) s += resps[k];
 		let sInv = 1/s;
 		for(let k=0; k<this.clusters; k++) resps[k] *= sInv;
 		return resps;

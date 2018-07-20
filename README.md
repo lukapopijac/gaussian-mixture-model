@@ -52,8 +52,11 @@ data.forEach(p => gmm.addPoint(p));
 // run 5 iterations of EM algorithm
 gmm.runEM(5);
 
-// predict cluster probabilities for the point [-5, 25]
-var prob = gmm.predict([-5, 25]);  // [0.8161537535012302, 0.1838462464987699]
+// predict cluster probabilities for point [-5, 25]
+var prob = gmm.predict([-5, 25]);  // [0.000009438559331418772, 0.000002126123537376676]
+
+// predict and normalize cluster probabilities for point [-5, 25]
+var probNorm = gmm.predictNormalize([-5, 25]);  // [0.8161537535012295, 0.18384624649877046]
 ```
 
 
