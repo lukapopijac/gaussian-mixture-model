@@ -1,4 +1,4 @@
-import ct from 'npm:cholesky-tools';
+import ct from 'cholesky-tools';
 
 export default class {
 	constructor({weights, means, covariances, bufferSize}) {
@@ -15,15 +15,15 @@ export default class {
 
 		// 'tmpArr' will hold sums of cluster resp., and inverses of those sums
 		this.tmpArr = new Float32Array(this.bufferSize);
-
+		
 		// cluster responsibilities cResps[cluster_idx][data_idx]
 		this.cResps = Array(this.clusters);
 		for(let k=0; k<this.clusters; k++) {
 			this.cResps[k] = new Float32Array(this.bufferSize);
 		}
-
+		
 		this.singularity = null;
-
+		
 		this.covCholeskies = null; // Choleskies = plural of Cholesky :)
 		this.covDeterminants = this.covariances.map(cov => ct.determinant(cov));
 	}

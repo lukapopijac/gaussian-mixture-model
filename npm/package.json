@@ -2,7 +2,7 @@
   "module": "./esm/index.js",
   "main": "./script/index.js",
   "name": "gaussian-mixture-model",
-  "version": "1.1.1",
+  "version": "1.1.4",
   "description": "Multivariate Gaussian mixture model for real-time data",
   "license": "MIT",
   "repository": {
@@ -17,9 +17,6 @@
   },
   "scripts": {
     "test": "node test_runner.js"
-  },
-  "dependencies": {
-    "cholesky-tools": "*"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",

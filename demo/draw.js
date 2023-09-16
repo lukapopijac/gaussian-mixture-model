@@ -1,11 +1,9 @@
-'use strict';
-
 // from chi-square distribution
 const s50 = Math.sqrt(1.38629);
 const s95 = Math.sqrt(5.99146);
 const s99 = Math.sqrt(9.21034);
 
-class Draw {
+export default class Draw {
 	constructor(canvas, xMin, xMax, yMin, yMax) {
 		this.canvas = canvas;
 		this.xMin = xMin;
