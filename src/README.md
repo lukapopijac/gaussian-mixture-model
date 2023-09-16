@@ -1,7 +1,9 @@
 Build package for npm
 ---------------------
 ```bash
-deno run -A build_npm.js
+deno run -A build_npm.js <version>
+cd npm
+npm publish
 ```
 
 
