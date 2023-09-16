@@ -1,8 +1,6 @@
-'use strict';
+import ct from 'npm:cholesky-tools';
 
-const ct = require('cholesky-tools');
-
-module.exports = class {
+export default class {
 	constructor({weights, means, covariances, bufferSize}) {
 		this.dimensions = means[0].length;
 		this.clusters = means.length;
@@ -10,22 +8,22 @@ module.exports = class {
 		this.means = means.map(mu => mu.slice());
 		this.covariances = covariances.map(cov => cov.map(row => row.slice()));
 		this.bufferSize = bufferSize != null ? bufferSize : 1e6;
-		
+
 		this.data = Array(this.bufferSize);
 		this.idx = 0;          // index of the next data point
 		this.dataLength = 0;
-		
+
 		// 'tmpArr' will hold sums of cluster resp., and inverses of those sums
 		this.tmpArr = new Float32Array(this.bufferSize);
-		
+
 		// cluster responsibilities cResps[cluster_idx][data_idx]
 		this.cResps = Array(this.clusters);
 		for(let k=0; k<this.clusters; k++) {
 			this.cResps[k] = new Float32Array(this.bufferSize);
 		}
-		
+
 		this.singularity = null;
-		
+
 		this.covCholeskies = null; // Choleskies = plural of Cholesky :)
 		this.covDeterminants = this.covariances.map(cov => ct.determinant(cov));
 	}
@@ -90,6 +88,7 @@ module.exports = class {
 		return resps;
 	}
 };
+
 
 function runExpectation() {
 	this.tmpArr.fill(0, 0, this.dataLength);

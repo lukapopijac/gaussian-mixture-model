@@ -1,0 +1,28 @@
+{
+  "module": "./esm/index.js",
+  "main": "./script/index.js",
+  "name": "gaussian-mixture-model",
+  "version": "1.1.1",
+  "description": "Multivariate Gaussian mixture model for real-time data",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukapopijac/gaussian-mixture-model.git"
+  },
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./script/index.js"
+    }
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "dependencies": {
+    "cholesky-tools": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "picocolors": "^1.0.0"
+  }
+}
