@@ -8,24 +8,27 @@ class GitHubLink extends HTMLElement {
 			<style>
 				a {
 					position: absolute;
-					top: 14px;
-					right: 14px;
-					font-family: sans-serif;
-					font-weight: normal;
-					font-size: 16px;
-					line-height: normal;
-					color: blue;
-					cursor: pointer;
-					overflow: hidden;
-					pointer-events: auto;
-					text-decoration: none;
-					border: 1px solid blue;
-					padding: 6px 10px;
+					top: 12px;
+					right: 12px;
+					background-color: #f0f0f0;
+					color: #333;
+					font-size: 14px;
+					padding: 4px 10px;
+					border: 1px solid #ccc;
 					border-radius: 4px;
-					background: rgba(255,255,255,0.3);
+					text-align: center;
+					text-decoration: none;
+					cursor: pointer;
+				}
+				a:hover {
+					background-color: #e0e0e0;
+				}
+				a:focus {
+					outline: none;
+					box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 				}
 			</style>
-			<a href="${this.getAttribute('href')}">GitHub</a>
+			<a href="${this.getAttribute('href')}" target="_blank">GitHub</a>
 		`;
 	}
 }
