@@ -10,6 +10,6 @@
   },
   "devDependencies": {
     "cholesky-tools": "^0.1.7",
-    "vite": "^4.4.5"
+    "vite": "^6.0.7"
   }
 }
